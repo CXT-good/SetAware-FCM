@@ -1,0 +1,19 @@
+{
+  "description": "Manuscript-default architecture and schedule; replace input paths and verify the final experiment record.",
+  "launcher": "torchrun",
+  "processes": 8,
+  "module": "mae.train",
+  "arguments": [
+    "--pretrain_manifest", "${FCM_DATA_ROOT}/pretrain_manifest.xlsx",
+    "--experiment_dir", "${FCM_OUTPUT_ROOT}/mae",
+    "--model_size", "tiny",
+    "--epochs", "80",
+    "--batch_size", "6144",
+    "--mask_ratio", "0.25",
+    "--warmup_ratio", "0.2",
+    "--warmup_start_lr", "5e-7",
+    "--lr", "1e-5",
+    "--min_lr", "1e-6",
+    "--max_grad_norm", "0.5"
+  ]
+}

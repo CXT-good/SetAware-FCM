@@ -135,36 +135,41 @@ def main(method: str | None = None) -> None:
             mode="intersection",
         )
         n_train = int(X_tr.shape[0])
-        data_dir = os.path.dirname(dataset_xlsx)
-        ref_xlsx = os.path.join(data_dir, f"{REF_DATASET_KEY}_dataset_split.xlsx")
-        if ds_key == REF_DATASET_KEY:
-            n_ref_train = n_train
-        else:
-            n_ref_train = count_train_samples_for_split(
-                ref_xlsx,
-                max_cells_per_file=max_train,
-            )
-
         deep_epochs = args.deepcytof_epochs
+        n_ref_train = None
+        target_total_steps = None
+        epoch_mode = "explicit" if deep_epochs > 0 else "automatic"
         if deep_epochs <= 0:
+            data_dir = os.path.dirname(dataset_xlsx)
+            ref_xlsx = os.path.join(data_dir, f"{REF_DATASET_KEY}_dataset_split.xlsx")
+            if ds_key == REF_DATASET_KEY:
+                n_ref_train = n_train
+            else:
+                n_ref_train = count_train_samples_for_split(
+                    ref_xlsx,
+                    max_cells_per_file=max_train,
+                )
             deep_epochs = compute_epochs_from_sample_count(
                 n_train,
                 n_ref_train,
                 ref_epochs=REF_EPOCHS,
                 batch_size=DEEPCYTOF_BATCH_SIZE,
             )
+            ref_steps_per_epoch = max(1, math.ceil(n_ref_train / DEEPCYTOF_BATCH_SIZE))
+            target_total_steps = REF_EPOCHS * ref_steps_per_epoch
         if args.max_deepcytof_epochs > 0:
             deep_epochs = min(deep_epochs, args.max_deepcytof_epochs)
 
         steps_per_epoch = max(1, math.ceil(n_train / DEEPCYTOF_BATCH_SIZE))
-        ref_steps_per_epoch = max(1, math.ceil(n_ref_train / DEEPCYTOF_BATCH_SIZE))
-        target_total_steps = REF_EPOCHS * ref_steps_per_epoch
         print("\n" + "=" * 60)
         print(f"DeepCyTOF (交集) epochs={deep_epochs}")
+        if epoch_mode == "automatic":
+            print(
+                f"迭代对齐: 基准={REF_DATASET_KEY} {REF_EPOCHS} epoch "
+                f"(~{target_total_steps} steps, batch={DEEPCYTOF_BATCH_SIZE})"
+            )
         print(
-            f"迭代对齐: 基准={REF_DATASET_KEY} {REF_EPOCHS} epoch "
-            f"(~{target_total_steps} steps, batch={DEEPCYTOF_BATCH_SIZE})；"
-            f"本集 train={n_train}, steps/epoch={steps_per_epoch}, "
+            f"epoch_mode={epoch_mode}, train={n_train}, steps/epoch={steps_per_epoch}, "
             f"总 steps~{deep_epochs * steps_per_epoch}"
         )
         print("=" * 60)
@@ -189,8 +194,9 @@ def main(method: str | None = None) -> None:
                     "class_to_index": class_to_index,
                     "deepcytof_epochs": deep_epochs,
                     "deepcytof_batch_size": DEEPCYTOF_BATCH_SIZE,
-                    "ref_dataset_key": REF_DATASET_KEY,
-                    "ref_epochs": REF_EPOCHS,
+                    "epoch_mode": epoch_mode,
+                    "ref_dataset_key": REF_DATASET_KEY if epoch_mode == "automatic" else None,
+                    "ref_epochs": REF_EPOCHS if epoch_mode == "automatic" else None,
                     "n_train_samples": n_train,
                     "n_ref_train_samples": n_ref_train,
                     "steps_per_epoch": steps_per_epoch,

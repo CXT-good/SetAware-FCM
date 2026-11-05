@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "Cite this software release and the associated manuscript when its final bibliographic details are available."
+title: "SetAware-FCM: Set-aware flow cytometry modelling for cell and patient classification in haematological diseases"
+type: software
+version: 1.0.0
+authors:
+  - name: "SetAware-FCM contributors"
+repository-code: "https://github.com/Intelligent-Medical-Research-Group/SetAware-FCM"
+url: "https://github.com/Intelligent-Medical-Research-Group/SetAware-FCM"
+abstract: "Marker-aware and population-context models for cell-level and patient-level flow-cytometry classification."
+keywords:
+  - flow cytometry
+  - set transformer
+  - multiple instance learning

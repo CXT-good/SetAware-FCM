@@ -1,0 +1,753 @@
+{
+  "sources_workbook": {
+    "source": "patient_and_gate_level_large_tables.xlsx / Sources",
+    "sha256": "43acd9dc89a7ddcb33faaaa93cd5ee8601fe7452e4c46bfda63e5ee75c89668a"
+  },
+  "manuscript": {
+    "source": "main.tex / Methods 2.3 and 2.4 (2026-11-05)",
+    "sha256": "f55bac01be8050bb2e3742d5a09ae37703a010af0371205de24d1c695633e6d6"
+  },
+  "patient": [
+    {
+      "dataset": "09_Z2JW_LMD",
+      "method": "CA-MIL",
+      "checkpoint_role": "checkpoint_latest.pt",
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 6
+      },
+      "metadata": {
+        "id": "09_Z2JW_LMD_stage1_eval_config",
+        "source": "09_Z2JW_LMD / CA-MIL / eval_config.json",
+        "sha256": "b11a4e980caf6d4208b108cb0088ee54e8ffa8a49e259d772bd80e92b0cac237"
+      },
+      "summary_evidence": {
+        "source": "09_Z2JW_LMD / CA-MIL / summary.json",
+        "sha256": "1d2c4a12aac74a08df68e5958dea63129713ae0d7b3c24b7e95a672a3eef1a32"
+      },
+      "checkpoint_epoch": 160,
+      "training_arguments": {
+        "model_size": "tiny",
+        "d_model": 128,
+        "encoder_layers": 6,
+        "decoder_layers": 2,
+        "n_heads": 8,
+        "d_ff": 512,
+        "dropout": 0.1,
+        "attention_hidden_dim": 128,
+        "classifier_hidden_dim": 128,
+        "epochs": 160,
+        "batch_size": 1,
+        "seed": 42,
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "lr": 0.0001,
+        "weight_decay": 0.0001,
+        "train_sheet": "train",
+        "val_sheet": "test",
+        "grad_clip": 1
+      },
+      "evaluation_arguments": {
+        "sheet": "test",
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "seed": 42
+      },
+      "evaluation_effective": {
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "random_sample": false,
+        "seed": 42
+      },
+      "status": "historical_configuration_recovered",
+      "evaluation_note": "Explicit evaluation options follow the recorded effective summary, not nullable CLI values. Null historical seed is operationally zero with nonrandom first-row truncation.",
+      "unresolved": [
+        "private_split_manifest_and_preprocessing_artifacts",
+        "pretrained_encoder_checkpoint_identity",
+        "training_world_size_and_software_lock",
+        "clinical_metric_reproduction",
+        "selected_checkpoint_file_and_checksum"
+      ]
+    },
+    {
+      "dataset": "09_Z2JW_LMD",
+      "method": "TACA-MIL",
+      "checkpoint_role": "checkpoint_best.pt",
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 7
+      },
+      "metadata": {
+        "id": "09_Z2JW_LMD_stage2_eval_config",
+        "source": "09_Z2JW_LMD / TACA-MIL / eval_config.json",
+        "sha256": "f2ba698c649bd35a82e9a553852ed81345f43c588406ef627b035de7f8478932"
+      },
+      "summary_evidence": {
+        "source": "09_Z2JW_LMD / TACA-MIL / summary.json",
+        "sha256": "6d7a3a1aa26625200c602a6a5696cf84bf3bf32c0bac629ff63d1c2776276361"
+      },
+      "checkpoint_epoch": 54,
+      "training_arguments": {
+        "model_size": "tiny",
+        "d_model": 128,
+        "encoder_layers": 6,
+        "decoder_layers": 2,
+        "n_heads": 8,
+        "d_ff": 512,
+        "dropout": 0.1,
+        "attention_hidden_dim": 128,
+        "classifier_hidden_dim": 128,
+        "epochs": 160,
+        "seed": 2024,
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "set_num_layers": 1,
+        "set_num_inds": 8,
+        "set_num_heads": 4,
+        "set_hidden_dim": 128,
+        "lr": 0.0001,
+        "weight_decay": 0.0001,
+        "train_sheet": "train",
+        "val_sheet": "test",
+        "grad_clip": 1
+      },
+      "evaluation_arguments": {
+        "sheet": "test",
+        "filter_mode": null,
+        "max_cells_per_tube": null,
+        "seed": null
+      },
+      "evaluation_effective": {
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "random_sample": false,
+        "seed": 2024
+      },
+      "status": "historical_configuration_recovered",
+      "evaluation_note": "Explicit evaluation options follow the recorded effective summary, not nullable CLI values. Null historical seed is operationally zero with nonrandom first-row truncation.",
+      "unresolved": [
+        "private_split_manifest_and_preprocessing_artifacts",
+        "pretrained_encoder_checkpoint_identity",
+        "training_world_size_and_software_lock",
+        "clinical_metric_reproduction",
+        "selected_checkpoint_file_and_checksum"
+      ]
+    },
+    {
+      "dataset": "14_ZZ6B",
+      "method": "CA-MIL",
+      "checkpoint_role": "checkpoint_latest.pt",
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 12
+      },
+      "metadata": {
+        "id": "14_ZZ6B_stage1_eval_config",
+        "source": "14_ZZ6B / CA-MIL / eval_config.json",
+        "sha256": "0ef75e2fa1e67fa24be21886321f81256e03bef85027186c058aafeaad005fe7"
+      },
+      "summary_evidence": {
+        "source": "14_ZZ6B / CA-MIL / summary.json",
+        "sha256": "7c6c1bde126e8346e7610910b6f1297ec8df568dfd19eb8f3b6869a73cf25775"
+      },
+      "checkpoint_epoch": 160,
+      "training_arguments": {
+        "model_size": "tiny",
+        "d_model": 128,
+        "encoder_layers": 6,
+        "decoder_layers": 2,
+        "n_heads": 8,
+        "d_ff": 512,
+        "dropout": 0.1,
+        "attention_hidden_dim": 128,
+        "classifier_hidden_dim": 128,
+        "epochs": 160,
+        "batch_size": 1,
+        "seed": 42,
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "lr": 0.0001,
+        "weight_decay": 0.0001,
+        "train_sheet": "train",
+        "val_sheet": "test",
+        "grad_clip": 1
+      },
+      "evaluation_arguments": {
+        "sheet": "test",
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "seed": 42
+      },
+      "evaluation_effective": {
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "random_sample": false,
+        "seed": 42
+      },
+      "status": "historical_configuration_recovered",
+      "evaluation_note": "Explicit evaluation options follow the recorded effective summary, not nullable CLI values. Null historical seed is operationally zero with nonrandom first-row truncation.",
+      "unresolved": [
+        "private_split_manifest_and_preprocessing_artifacts",
+        "pretrained_encoder_checkpoint_identity",
+        "training_world_size_and_software_lock",
+        "clinical_metric_reproduction",
+        "selected_checkpoint_file_and_checksum"
+      ]
+    },
+    {
+      "dataset": "14_ZZ6B",
+      "method": "TACA-MIL",
+      "checkpoint_role": "checkpoint_best.pt",
+      "checkpoint_file_available": true,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 13
+      },
+      "metadata": {
+        "id": "14_ZZ6B_stage2_eval_config",
+        "source": "14_ZZ6B / TACA-MIL / eval_config.json",
+        "sha256": "12164fe5763d5bf4f81526f81103ee89d7914295f73084127f397684c1094b5a"
+      },
+      "summary_evidence": {
+        "source": "14_ZZ6B / TACA-MIL / summary.json",
+        "sha256": "1b8342d7df40dd1ec751a140f0c8643c8354022cd25307765468b5204a0640a4"
+      },
+      "checkpoint_epoch": 156,
+      "training_arguments": {
+        "model_size": "tiny",
+        "d_model": 128,
+        "encoder_layers": 6,
+        "decoder_layers": 2,
+        "n_heads": 8,
+        "d_ff": 512,
+        "dropout": 0.1,
+        "attention_hidden_dim": 128,
+        "classifier_hidden_dim": 128,
+        "epochs": 160,
+        "seed": 7,
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "set_num_layers": 1,
+        "set_num_inds": 8,
+        "set_num_heads": 4,
+        "set_hidden_dim": 128,
+        "lr": 0.0001,
+        "weight_decay": 0.001,
+        "train_sheet": "train",
+        "val_sheet": "test",
+        "grad_clip": 1
+      },
+      "evaluation_arguments": {
+        "sheet": "test",
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "seed": null
+      },
+      "evaluation_effective": {
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "random_sample": false,
+        "seed": null
+      },
+      "checkpoint_sha256": "f05824f31e1642b47c68beaeb526cf9a26ad6a3461b8c3a1a14c1e8fe318b2d3",
+      "status": "historical_configuration_recovered",
+      "evaluation_note": "Explicit evaluation options follow the recorded effective summary, not nullable CLI values. Null historical seed is operationally zero with nonrandom first-row truncation.",
+      "unresolved": [
+        "private_split_manifest_and_preprocessing_artifacts",
+        "pretrained_encoder_checkpoint_identity",
+        "training_world_size_and_software_lock",
+        "clinical_metric_reproduction"
+      ]
+    },
+    {
+      "dataset": "15_ZZYA",
+      "method": "CA-MIL",
+      "checkpoint_role": "checkpoint_latest.pt",
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 18
+      },
+      "metadata": {
+        "id": "15_ZZYA_stage1_eval_config",
+        "source": "15_ZZYA / CA-MIL / eval_config.json",
+        "sha256": "ff51b12e1d9cfa6b6dea14669b71e441e8ad4021a077e3dd245423e817c438a1"
+      },
+      "summary_evidence": {
+        "source": "15_ZZYA / CA-MIL / summary.json",
+        "sha256": "3e84deb6ee75ff827100244796b27ef75dc162bc6b246119dfbaeccc3bcc9350"
+      },
+      "checkpoint_epoch": 160,
+      "training_arguments": {
+        "model_size": "tiny",
+        "d_model": 128,
+        "encoder_layers": 6,
+        "decoder_layers": 2,
+        "n_heads": 8,
+        "d_ff": 512,
+        "dropout": 0.1,
+        "attention_hidden_dim": 128,
+        "classifier_hidden_dim": 128,
+        "epochs": 160,
+        "batch_size": 1,
+        "seed": 42,
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "lr": 0.0001,
+        "weight_decay": 0.0001,
+        "train_sheet": "train",
+        "val_sheet": "test",
+        "grad_clip": 1
+      },
+      "evaluation_arguments": {
+        "sheet": "test",
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "seed": 42
+      },
+      "evaluation_effective": {
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "random_sample": false,
+        "seed": 42
+      },
+      "status": "historical_configuration_recovered",
+      "evaluation_note": "Explicit evaluation options follow the recorded effective summary, not nullable CLI values. Null historical seed is operationally zero with nonrandom first-row truncation.",
+      "unresolved": [
+        "private_split_manifest_and_preprocessing_artifacts",
+        "pretrained_encoder_checkpoint_identity",
+        "training_world_size_and_software_lock",
+        "clinical_metric_reproduction",
+        "selected_checkpoint_file_and_checksum"
+      ]
+    },
+    {
+      "dataset": "15_ZZYA",
+      "method": "TACA-MIL",
+      "checkpoint_role": "checkpoint_latest.pt",
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 19
+      },
+      "metadata": {
+        "id": "15_ZZYA_stage2_eval_config",
+        "source": "15_ZZYA / TACA-MIL / eval_config.json",
+        "sha256": "9e1e86e18b7b86c9265436b1b3855adb5be6827756d3b4ba185518421cb9058f"
+      },
+      "summary_evidence": {
+        "source": "15_ZZYA / TACA-MIL / summary.json",
+        "sha256": "8d2fd87c0ab3634090ab43afdafb6b383499db3c55558a1c5766c1ed9ad4532d"
+      },
+      "checkpoint_epoch": 160,
+      "training_arguments": {
+        "model_size": "tiny",
+        "d_model": 128,
+        "encoder_layers": 6,
+        "decoder_layers": 2,
+        "n_heads": 8,
+        "d_ff": 512,
+        "dropout": 0.1,
+        "attention_hidden_dim": 128,
+        "classifier_hidden_dim": 128,
+        "epochs": 160,
+        "seed": 42,
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "set_num_layers": 2,
+        "set_num_inds": 16,
+        "set_num_heads": 4,
+        "set_hidden_dim": 128,
+        "lr": 0.0001,
+        "weight_decay": 0.0001,
+        "train_sheet": "train",
+        "val_sheet": "test",
+        "grad_clip": 1
+      },
+      "evaluation_arguments": {
+        "sheet": "test",
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "seed": 42
+      },
+      "evaluation_effective": {
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "random_sample": false,
+        "seed": 42
+      },
+      "status": "historical_configuration_recovered",
+      "evaluation_note": "Explicit evaluation options follow the recorded effective summary, not nullable CLI values. Null historical seed is operationally zero with nonrandom first-row truncation.",
+      "unresolved": [
+        "private_split_manifest_and_preprocessing_artifacts",
+        "pretrained_encoder_checkpoint_identity",
+        "training_world_size_and_software_lock",
+        "clinical_metric_reproduction",
+        "selected_checkpoint_file_and_checksum"
+      ]
+    },
+    {
+      "dataset": "Z27",
+      "method": "CA-MIL",
+      "checkpoint_role": "checkpoint_latest.pt",
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 24
+      },
+      "metadata": {
+        "id": "Z27_stage1_eval_config",
+        "source": "Z27 / CA-MIL / eval_config.json",
+        "sha256": "af512553903c46948e55728347a91ea9307f1ffc24bd387b15c914ec16d74ae8"
+      },
+      "summary_evidence": {
+        "source": "Z27 / CA-MIL / summary.json",
+        "sha256": "ca019d038b504f5dcf5e3367ba2fa9cea743c3f3a0d89628c374425d9b32120f"
+      },
+      "checkpoint_epoch": 160,
+      "training_arguments": {
+        "model_size": "tiny",
+        "d_model": 128,
+        "encoder_layers": 6,
+        "decoder_layers": 2,
+        "n_heads": 8,
+        "d_ff": 512,
+        "dropout": 0.1,
+        "attention_hidden_dim": 128,
+        "classifier_hidden_dim": 128,
+        "epochs": 160,
+        "batch_size": 1,
+        "seed": 42,
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "lr": 0.0001,
+        "weight_decay": 0.0001,
+        "train_sheet": "train",
+        "val_sheet": "test",
+        "grad_clip": 1
+      },
+      "evaluation_arguments": {
+        "sheet": "test",
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "seed": 42
+      },
+      "evaluation_effective": {
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "random_sample": false,
+        "seed": 42
+      },
+      "status": "historical_configuration_recovered",
+      "evaluation_note": "Explicit evaluation options follow the recorded effective summary, not nullable CLI values. Null historical seed is operationally zero with nonrandom first-row truncation.",
+      "unresolved": [
+        "private_split_manifest_and_preprocessing_artifacts",
+        "pretrained_encoder_checkpoint_identity",
+        "training_world_size_and_software_lock",
+        "clinical_metric_reproduction",
+        "selected_checkpoint_file_and_checksum"
+      ]
+    },
+    {
+      "dataset": "Z27",
+      "method": "TACA-MIL",
+      "checkpoint_role": "checkpoint_best.pt",
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 25
+      },
+      "metadata": {
+        "id": "Z27_stage2_eval_config",
+        "source": "Z27 / TACA-MIL / eval_config.json",
+        "sha256": "9952aac3ecc9ce8a6c3df9421484b33b99560c53d9af235ea72362bf5e89c343"
+      },
+      "summary_evidence": {
+        "source": "Z27 / TACA-MIL / summary.json",
+        "sha256": "80e45fd7b185b44bd357f6fa80bf6279fbef7b6d8f89305892c2f77680201aeb"
+      },
+      "checkpoint_epoch": 36,
+      "training_arguments": {
+        "model_size": "tiny",
+        "d_model": 128,
+        "encoder_layers": 6,
+        "decoder_layers": 2,
+        "n_heads": 8,
+        "d_ff": 512,
+        "dropout": 0.1,
+        "attention_hidden_dim": 128,
+        "classifier_hidden_dim": 128,
+        "epochs": 160,
+        "seed": 42,
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "set_num_layers": 2,
+        "set_num_inds": 16,
+        "set_num_heads": 4,
+        "set_hidden_dim": 128,
+        "lr": 0.0001,
+        "weight_decay": 0.0001,
+        "train_sheet": "train",
+        "val_sheet": "test",
+        "grad_clip": 1
+      },
+      "evaluation_arguments": {
+        "sheet": "test",
+        "filter_mode": null,
+        "max_cells_per_tube": null,
+        "seed": null
+      },
+      "evaluation_effective": {
+        "filter_mode": "count",
+        "max_cells_per_tube": 5000,
+        "random_sample": false,
+        "seed": 42
+      },
+      "status": "historical_configuration_recovered",
+      "evaluation_note": "Explicit evaluation options follow the recorded effective summary, not nullable CLI values. Null historical seed is operationally zero with nonrandom first-row truncation.",
+      "unresolved": [
+        "private_split_manifest_and_preprocessing_artifacts",
+        "pretrained_encoder_checkpoint_identity",
+        "training_world_size_and_software_lock",
+        "clinical_metric_reproduction",
+        "selected_checkpoint_file_and_checksum"
+      ]
+    }
+  ],
+  "cell": [
+    {
+      "dataset": "01_ZZPH_XML",
+      "method": "CTransformer",
+      "checkpoint_role": null,
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 31
+      },
+      "initialization_path_hint": "random",
+      "status": "source_identity_partial",
+      "unresolved": [
+        "full_training_arguments_and_run_identity",
+        "input_embedding_checkpoint_identity",
+        "data_partition_and_preprocessing_identity",
+        "selected_checkpoint_file_and_checksum"
+      ],
+      "path_hint_is_not_checkpoint_metadata": true
+    },
+    {
+      "dataset": "01_ZZPH_XML",
+      "method": "PACTransformer",
+      "checkpoint_role": null,
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 32
+      },
+      "initialization_path_hint": null,
+      "status": "source_identity_partial",
+      "unresolved": [
+        "full_training_arguments_and_run_identity",
+        "input_embedding_checkpoint_identity",
+        "data_partition_and_preprocessing_identity",
+        "selected_checkpoint_file_and_checksum"
+      ],
+      "path_hint_is_not_checkpoint_metadata": true
+    },
+    {
+      "dataset": "16_11046402_BLAST110",
+      "method": "CTransformer",
+      "checkpoint_role": "checkpoint_best.pt",
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 38
+      },
+      "initialization_path_hint": "random",
+      "status": "source_identity_partial",
+      "unresolved": [
+        "full_training_arguments_and_run_identity",
+        "input_embedding_checkpoint_identity",
+        "data_partition_and_preprocessing_identity",
+        "selected_checkpoint_file_and_checksum"
+      ],
+      "path_hint_is_not_checkpoint_metadata": true
+    },
+    {
+      "dataset": "16_11046402_BLAST110",
+      "method": "PACTransformer",
+      "checkpoint_role": "checkpoint_epoch_100.pt",
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 39
+      },
+      "initialization_path_hint": "random",
+      "status": "source_identity_partial",
+      "unresolved": [
+        "full_training_arguments_and_run_identity",
+        "input_embedding_checkpoint_identity",
+        "data_partition_and_preprocessing_identity",
+        "selected_checkpoint_file_and_checksum"
+      ],
+      "path_hint_is_not_checkpoint_metadata": true
+    },
+    {
+      "dataset": "output_flowrepository_plus_gates_transformed_Bln",
+      "method": "CTransformer",
+      "checkpoint_role": "checkpoint_latest.pt",
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 45
+      },
+      "initialization_path_hint": "random",
+      "status": "source_identity_partial",
+      "unresolved": [
+        "full_training_arguments_and_run_identity",
+        "input_embedding_checkpoint_identity",
+        "data_partition_and_preprocessing_identity",
+        "selected_checkpoint_file_and_checksum"
+      ],
+      "path_hint_is_not_checkpoint_metadata": true
+    },
+    {
+      "dataset": "output_flowrepository_plus_gates_transformed_Bln",
+      "method": "PACTransformer",
+      "checkpoint_role": "checkpoint_best.pt",
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 46
+      },
+      "initialization_path_hint": null,
+      "status": "source_identity_partial",
+      "unresolved": [
+        "full_training_arguments_and_run_identity",
+        "input_embedding_checkpoint_identity",
+        "data_partition_and_preprocessing_identity",
+        "selected_checkpoint_file_and_checksum"
+      ],
+      "path_hint_is_not_checkpoint_metadata": true
+    },
+    {
+      "dataset": "output_flowrepository_plus_gates_transformed_Bue",
+      "method": "CTransformer",
+      "checkpoint_role": "checkpoint_latest.pt",
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 52
+      },
+      "initialization_path_hint": "random",
+      "status": "source_identity_partial",
+      "unresolved": [
+        "full_training_arguments_and_run_identity",
+        "input_embedding_checkpoint_identity",
+        "data_partition_and_preprocessing_identity",
+        "selected_checkpoint_file_and_checksum"
+      ],
+      "path_hint_is_not_checkpoint_metadata": true
+    },
+    {
+      "dataset": "output_flowrepository_plus_gates_transformed_Bue",
+      "method": "PACTransformer",
+      "checkpoint_role": "checkpoint_epoch_100.pt",
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 53
+      },
+      "initialization_path_hint": "random",
+      "status": "source_identity_partial",
+      "unresolved": [
+        "full_training_arguments_and_run_identity",
+        "input_embedding_checkpoint_identity",
+        "data_partition_and_preprocessing_identity",
+        "selected_checkpoint_file_and_checksum"
+      ],
+      "path_hint_is_not_checkpoint_metadata": true
+    },
+    {
+      "dataset": "output_flowrepository_plus_gates_transformed_Routine",
+      "method": "CTransformer",
+      "checkpoint_role": "checkpoint_latest.pt",
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 59
+      },
+      "initialization_path_hint": "random",
+      "status": "source_identity_partial",
+      "unresolved": [
+        "full_training_arguments_and_run_identity",
+        "input_embedding_checkpoint_identity",
+        "data_partition_and_preprocessing_identity",
+        "selected_checkpoint_file_and_checksum"
+      ],
+      "path_hint_is_not_checkpoint_metadata": true
+    },
+    {
+      "dataset": "output_flowrepository_plus_gates_transformed_Routine",
+      "method": "PACTransformer",
+      "checkpoint_role": "checkpoint_epoch_100.pt",
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 60
+      },
+      "initialization_path_hint": "random",
+      "status": "source_identity_partial",
+      "unresolved": [
+        "full_training_arguments_and_run_identity",
+        "input_embedding_checkpoint_identity",
+        "data_partition_and_preprocessing_identity",
+        "selected_checkpoint_file_and_checksum"
+      ],
+      "path_hint_is_not_checkpoint_metadata": true
+    },
+    {
+      "dataset": "Zhongnan_Hospital",
+      "method": "CTransformer",
+      "checkpoint_role": null,
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 66
+      },
+      "initialization_path_hint": "random_2",
+      "status": "source_identity_partial",
+      "unresolved": [
+        "full_training_arguments_and_run_identity",
+        "input_embedding_checkpoint_identity",
+        "data_partition_and_preprocessing_identity",
+        "selected_checkpoint_file_and_checksum"
+      ],
+      "path_hint_is_not_checkpoint_metadata": true
+    },
+    {
+      "dataset": "Zhongnan_Hospital",
+      "method": "PACTransformer",
+      "checkpoint_role": null,
+      "checkpoint_file_available": false,
+      "source_row": {
+        "sheet": "Sources",
+        "row": 67
+      },
+      "initialization_path_hint": null,
+      "status": "source_identity_partial",
+      "unresolved": [
+        "full_training_arguments_and_run_identity",
+        "input_embedding_checkpoint_identity",
+        "data_partition_and_preprocessing_identity",
+        "selected_checkpoint_file_and_checksum"
+      ],
+      "path_hint_is_not_checkpoint_metadata": true
+    }
+  ],
+  "schema_version": 1,
+  "clinical_reproduction_verified": false,
+  "scope": "Sanitized configuration evidence only. Metadata hashes identify locally inspected records; clinical data, original metadata files, and weights are not distributed."
+}

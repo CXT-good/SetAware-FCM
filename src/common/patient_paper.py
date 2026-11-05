@@ -6,6 +6,7 @@ import math
 import re
 from dataclasses import asdict, dataclass
 from functools import lru_cache
+from numbers import Real
 from pathlib import Path
 
 import joblib
@@ -29,6 +30,14 @@ def tube_id_from_path(path: str) -> str:
     name = Path(path).name
     match = re.search(r"tube[-_]?(\d+)", name, flags=re.IGNORECASE)
     return match.group(1) if match else "panel"
+
+
+def _explicit_tube_id(value) -> str | None:
+    if pd.isna(value):
+        return None
+    if isinstance(value, Real) and not isinstance(value, bool) and float(value).is_integer():
+        return str(int(value))
+    return str(value).strip() or None
 
 
 @lru_cache(maxsize=512)
@@ -61,6 +70,11 @@ def patient_table(split_xlsx: str, split: str) -> pd.DataFrame:
     rows = read_split_book(split_xlsx, split)
     rows = rows.copy()
     rows["_tube_id"] = rows["_csv_path"].map(tube_id_from_path)
+    tube_col = next((c for c in rows.columns if str(c).strip().lower() == "tube_type"), None)
+    if tube_col is not None:
+        explicit = rows[tube_col].map(_explicit_tube_id).astype("string")
+        present = explicit.notna() & explicit.ne("")
+        rows.loc[present, "_tube_id"] = explicit[present].astype(str)
     return rows
 
 

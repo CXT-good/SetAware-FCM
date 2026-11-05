@@ -8,6 +8,7 @@ from sklearn.mixture import GaussianMixture
 from sklearn.preprocessing import StandardScaler
 
 from common.patient_paper import patient_labels
+from common.patient_baselines import stable_seed
 from patient_level.baselines.gmm_fisher_svm.model import (
     EXCLUDE_COLS,
     read_header,
@@ -62,7 +63,7 @@ def load_one_file(path, markers, max_events, seed):
         if len(arr)==0:
             return None
         if max_events > 0 and len(arr) > max_events:
-            rng=np.random.default_rng(seed + abs(hash(str(path)))%(2**31))
+            rng=np.random.default_rng(seed)
             arr=arr[rng.choice(len(arr), max_events, replace=False)]
         return arr.astype(np.float32, copy=False)
     except Exception as exc:
@@ -111,7 +112,7 @@ def fit_tube_pipeline(train_rows, tube, train_ids, k, args, seed_offset=0):
         if chunks:
             x=np.vstack(chunks)
             if args.max_events_per_patient_tube>0 and len(x)>args.max_events_per_patient_tube:
-                rng=np.random.default_rng(args.seed+seed_offset+abs(hash(str(pid)))%(2**31))
+                rng=np.random.default_rng(stable_seed(args.seed+seed_offset, "gmm_patient_tube", pid, tube))
                 x=x[rng.choice(len(x),args.max_events_per_patient_tube,replace=False)]
             arrays.append(x)
         else:
@@ -143,7 +144,7 @@ def transform_tube(rows, tube, ids, pipe, args, seed_offset=0):
             feats.append(np.zeros(pipe['dim'], dtype=np.float32)); continue
         x=np.vstack(chunks)
         if args.max_events_per_patient_tube>0 and len(x)>args.max_events_per_patient_tube:
-            rng=np.random.default_rng(args.seed+seed_offset+abs(hash(str(pid)))%(2**31))
+            rng=np.random.default_rng(stable_seed(args.seed+seed_offset, "gmm_patient_tube", pid, tube))
             x=x[rng.choice(len(x),args.max_events_per_patient_tube,replace=False)]
         z=transform(x,lo,hi,scaler)
         feats.append(fisher_vector_one(z,gmm))
@@ -151,7 +152,7 @@ def transform_tube(rows, tube, ids, pipe, args, seed_offset=0):
 
 
 def fit_feature_pipeline(train_rows, train_ids, eval_rows, eval_ids, k, args, seed_offset=0):
-    tubes=sorted(train_rows['_tube_id'].astype(str).unique(), key=lambda x: int(x) if str(x).isdigit() else str(x))
+    tubes=sorted(train_rows['_tube_id'].astype(str).unique(), key=lambda x: (0, int(x), x) if x.isdigit() else (1, x))
     pipes=[]; Xtr_parts=[]; Xev_parts=[]
     for ti,tube in enumerate(tubes):
         pipe=fit_tube_pipeline(train_rows,tube,train_ids,k,args,seed_offset+ti*1000)

@@ -45,26 +45,34 @@ Each model directory groups `model.py`, `train.py`, and `eval.py`. `common/` hol
 
 ## Setup
 
-The current repository publishes source code and this README, without package-installation metadata. Use Python 3.9 or newer, install the dependencies, and add `src/` to `PYTHONPATH`. The commands below use Bash.
+The paper environment uses **Python 3.9.25 and PyTorch 2.8.0**. Fixed dependency files distinguish the CUDA 12.8 paper build from a CPU software-check environment; see [environment details](docs/environment.md). Commands below use Bash and an existing Python 3.9.25 interpreter.
 
 ```bash
 git clone https://github.com/Intelligent-Medical-Research-Group/SetAware-FCM.git
 cd SetAware-FCM
 python -m venv .venv
 source .venv/bin/activate
-python -m pip install "torch>=2.0" "numpy>=1.23" "pandas>=1.5" \
-  "scikit-learn>=1.5" "scipy>=1.10" "matplotlib>=3.7" \
-  "openpyxl>=3.0" "tqdm>=4.64" "joblib>=1.2"
-export PYTHONPATH="$(pwd)/src${PYTHONPATH:+:$PYTHONPATH}"
+python -m pip install --upgrade pip==25.2
+python -m pip install -r requirements/paper-cu128.txt
+python -m pip install --no-deps -e .
 ```
 
-For GPU experiments, choose a PyTorch build compatible with the CUDA environment. Optional baseline dependencies are:
+For CPU-only software checks, replace the dependency-install command with:
 
 ```bash
-python -m pip install "umap-learn>=0.5" "xgboost>=2.0"
+python -m pip install -r requirements/cpu.txt
 ```
 
-FlowSOM uses the implementation included in this repository. There is no `pip install -e .` workflow in this source-only snapshot. Record the exact Python, PyTorch, CUDA, and dependency versions used for each experiment.
+The fixed environment includes baseline and test dependencies. `environment-paper.yml` also provides a Conda entry point. FlowSOM uses the implementation included here. Installing the package exposes the top-level `mae`, `cell_level`, `patient_level`, `common`, and `dataio` modules without an enclosing `fcm_ml` namespace.
+
+## Paper recipes and data protocol
+
+- [Paper run configurations and recovered historical settings](docs/paper_runs.md) distinguish manuscript-derived schedules, recovered final-evaluation settings, and unresolved evidence.
+- [Preprocessing and split protocol](docs/preprocessing.md) describes the prepared-CSV boundary, marker/label checks, and patient-disjoint partition requirements.
+- [Data format](docs/data_format.md) specifies the workbook schema. Run `python scripts/validate_manifests.py --help` before training; the validator never uploads data.
+- [Training guide](docs/training.md) explains the model pipeline and explicit checkpoint/evaluation policies.
+
+Historical paper recipes retain their recorded selection and evaluation policies. Examples with an independent validation split describe a different, explicit protocol; they are not substituted for historical runs.
 
 ## Quick CPU check
 
@@ -182,10 +190,18 @@ Patient baseline evaluators restore artifacts produced by their matching trainer
 
 Clinical event data, patient split manifests, trained checkpoints, and generated results are **not included**. Use data and models for which you have the appropriate access permissions. Exact result reproduction requires the original preprocessing, patient partitions, complete parameters, seeds, checkpoints, and checkpoint-selection policies; constructor defaults and the examples above do not identify final paper runs.
 
-The source was checked during curation with 60 local tests, 43 CLI help checks, isolated package imports, and synthetic CPU runs. Those supporting tests are not included in this source-only repository, and the checks do not establish reproduction of clinical metrics. Historical randomness remains in some baseline workflows, including UMAP fitting and hash-derived sampling; record `PYTHONHASHSEED` and the saved artifacts when applicable.
+Regression tests, synthetic examples, recipe files, and installation metadata are included. Repeat the software checks with:
 
-Known limitation: the inherited standalone logistic-regression evaluator uses multiclass `argmax` decoding, which is incorrect for a binary scikit-learn checkpoint with one coefficient row. Do not use that path for binary LR results without correcting and validating its decoding separately.
+```bash
+python scripts/check_release.py
+python -m pytest -q
+python examples/synthetic_demo.py
+```
+
+The [validation record](docs/validation.md) identifies the actual environment and completed checks. Passing software checks does not establish reproduction of clinical metrics. Save the seed, fitted baseline artifacts and environment with each run. FlowCat and GMM sampling use stable seeds independent of Python hash randomization; per-file sampling also survives moving or renaming an identical input file.
+
+The [issue and compatibility record](docs/known_issues.md) describes the eight implementation issues repaired for v1.0.0 and their sixteen original regression cases. Repairs change affected LR predictions, sampling, panel handling and PAC AP estimates; historical outputs require a fresh evaluation to compare with the corrected behavior.
 
 Load `state_dict` checkpoints with the corresponding architecture and configuration. Historical whole-model Python pickles may embed obsolete module paths and are not guaranteed to load after code reorganization.
 
-When referring to this implementation, record the [repository URL](https://github.com/Intelligent-Medical-Research-Group/SetAware-FCM) and the exact commit or release used. No software license is currently included; clarify reuse permissions and applicable third-party licenses with the repository owners.
+When referring to this implementation, record the [repository URL](https://github.com/Intelligent-Medical-Research-Group/SetAware-FCM) and exact paper release tag or commit. Software citation metadata is provided in [CITATION.cff](CITATION.cff). Project licensing is recorded in `LICENSE`; adapted-code notices are retained in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Code licensing does not grant rights to clinical data or externally distributed models. See [publication notes](docs/publication.md) for the release scope and remaining reproduction requirements.

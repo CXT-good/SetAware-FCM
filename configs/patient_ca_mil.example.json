@@ -1,0 +1,17 @@
+{
+  "description": "Portable training example with an explicit validation sheet; not a claim about historical checkpoint selection.",
+  "module": "patient_level.ca_mil.train",
+  "arguments": [
+    "--split_xlsx", "${FCM_DATA_ROOT}/patient_split.xlsx",
+    "--train_sheet", "train",
+    "--val_sheet", "validation",
+    "--pretrained_encoder", "${FCM_MAE_CHECKPOINT}",
+    "--output_dir", "${FCM_OUTPUT_ROOT}/ca_mil",
+    "--model_size", "tiny",
+    "--filter_mode", "none",
+    "--max_cells_per_tube", "5000",
+    "--epochs", "160",
+    "--weight_decay", "1e-4",
+    "--seed", "42"
+  ]
+}

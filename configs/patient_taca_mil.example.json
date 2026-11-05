@@ -1,0 +1,21 @@
+{
+  "description": "Portable TACA-MIL example; verify dataset-specific set depth, weight decay, and checkpoint protocol before reproducing a table.",
+  "module": "patient_level.taca_mil.train",
+  "arguments": [
+    "--split_xlsx", "${FCM_DATA_ROOT}/patient_split.xlsx",
+    "--train_sheet", "train",
+    "--val_sheet", "validation",
+    "--pretrained_encoder", "${FCM_MAE_CHECKPOINT}",
+    "--output_dir", "${FCM_OUTPUT_ROOT}/taca_mil",
+    "--model_size", "tiny",
+    "--set_hidden_dim", "128",
+    "--set_num_heads", "4",
+    "--set_num_inds", "16",
+    "--set_num_layers", "2",
+    "--filter_mode", "none",
+    "--max_cells_per_tube", "5000",
+    "--epochs", "160",
+    "--weight_decay", "1e-4",
+    "--seed", "42"
+  ]
+}

@@ -213,6 +213,7 @@ def main(method: str | None = None) -> None:
         if not npz.exists():
             npz = model_dir / "model_outputs" / "model.npz"
         data = np.load(npz, allow_pickle=True)
+        classes = data["classes"]
         coef = torch.from_numpy(data["coef"]).float()
         intercept = torch.from_numpy(data["intercept"]).float()
         mean = torch.from_numpy(data["scale_mean"]).float()
@@ -230,7 +231,14 @@ def main(method: str | None = None) -> None:
 
         def predict_batch(xb: torch.Tensor) -> np.ndarray:
             with torch.no_grad():
-                return forward_fn(xb).argmax(dim=1).cpu().numpy()
+                scores = forward_fn(xb)
+                if scores.shape[1] == 1:
+                    # sklearn's binary decision function selects classes_[1]
+                    # only for a strictly positive score; zero selects classes_[0].
+                    indices = (scores[:, 0] > 0).long()
+                else:
+                    indices = scores.argmax(dim=1)
+                return classes[indices.cpu().numpy()]
 
         y_pred = _predict_batched_torch(Xs, predict_batch, args.batch_size)
         timing_core = _measure_forward_only_torch(

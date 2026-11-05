@@ -1,0 +1,9 @@
+name: fcm-ml-paper
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9.25
+  - pip=25.2
+  - pip:
+      - -r requirements/paper-cu128.txt
+      - -e .[baselines,dev]

@@ -1,0 +1,12 @@
+include README.md README.zh-CN.md CITATION.cff environment-paper.yml
+include LICENSE THIRD_PARTY_NOTICES.md CHANGELOG.md
+include requirements.txt
+include .gitignore
+recursive-include requirements *.txt
+recursive-include docs *.md *.csv
+recursive-include configs *.json *.csv
+recursive-include examples *.py
+recursive-include scripts *.py
+recursive-include tests *.py
+recursive-include .github *.yml
+global-exclude __pycache__ *.py[cod]

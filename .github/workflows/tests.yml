@@ -1,0 +1,44 @@
+name: CPU regression
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cpu-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONHASHSEED: '42'
+      NUMBA_CACHE_DIR: ${{ runner.temp }}/numba-cache
+      MPLCONFIGDIR: ${{ runner.temp }}/matplotlib-cache
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7.1.0
+        with:
+          python-version: '3.9.25'
+          cache: pip
+          cache-dependency-path: requirements/*.txt
+      - name: Install fixed CPU environment
+        run: |
+          python -m pip install --upgrade pip==25.2
+          python -m pip install -r requirements/cpu.txt
+          python -m pip install --no-deps -e .
+      - name: Check source and release materials
+        run: python scripts/check_release.py
+      - name: Run regression tests
+        run: python -m pytest -q
+      - name: Check synthetic model interfaces
+        run: python examples/synthetic_demo.py
+      - name: Build source and wheel distributions
+        run: python -m build --no-isolation

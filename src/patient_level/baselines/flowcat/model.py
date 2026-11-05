@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset
 
-from common.patient_baselines import numeric_events
+from common.patient_baselines import numeric_events, stable_seed
 from common.patient_paper import marker_frame, scaled_values
 
 
@@ -38,7 +38,7 @@ def som_density(frame, grid_size: int, max_som_events: int, seed: int) -> np.nda
 
 
 def tube_order(rows) -> list[str]:
-    return sorted(rows["_tube_id"].astype(str).unique(), key=lambda x: int(x) if x.isdigit() else x)
+    return sorted(rows["_tube_id"].astype(str).unique(), key=lambda x: (0, int(x), x) if x.isdigit() else (1, x))
 
 
 def patient_tensor(rows, patient_id: str, tubes: list[str], grid_size: int, max_events: int, max_som_events: int, seed: int) -> np.ndarray:
@@ -49,7 +49,7 @@ def patient_tensor(rows, patient_id: str, tubes: list[str], grid_size: int, max_
             maps.append(np.zeros((grid_size, grid_size), dtype=np.float32))
             continue
         frame = marker_frame(hit["_csv_path"].iloc[0], max_events)
-        maps.append(som_density(frame, grid_size, max_som_events, seed + hash((patient_id, tube)) % 100000))
+        maps.append(som_density(frame, grid_size, max_som_events, stable_seed(seed, "flowcat", patient_id, tube)))
     return np.stack(maps).astype(np.float32)
 
 

@@ -41,7 +41,10 @@ def parse_args():
     p.add_argument("--batch_size", type=int, default=1)
     p.add_argument("--device", type=int, default=0)
     p.add_argument("--bootstrap", type=int, default=1000)
-    p.add_argument("--bootstrap_max_n", type=int, default=200000)
+    p.add_argument(
+        "--bootstrap_max_n", type=int, default=200000,
+        help="Pool-size cap for approximate bootstrap intervals; point estimates use all valid events",
+    )
     p.add_argument("--seed", type=int, default=2024)
     p.add_argument("--timing_warmup_batches", type=int, default=5)
     return p.parse_args()
@@ -72,21 +75,31 @@ def flatten_xuhao(x):
 
 
 def bootstrap_ci_binary(y_true, score, metric_fn, n_boot=1000, max_n=200000, seed=2024):
+    """Compute full-data points and optionally approximate capped intervals.
+
+    A capped interval resamples a smaller pool with rounded full-cohort class
+    proportions. If the cap rounds either class to zero, its bounds are NaN.
+    Point estimates always use all events with finite scores.
+    """
     y_true = np.asarray(y_true)
     score = np.asarray(score)
     valid = np.isfinite(score)
     y_true, score = y_true[valid], score[valid]
     if len(np.unique(y_true)) < 2:
         return np.nan, np.nan, np.nan
+    point = float(metric_fn(y_true, score))
+    if n_boot <= 0 or max_n < 2:
+        return point, np.nan, np.nan
     rng = np.random.default_rng(seed)
     if len(y_true) > max_n:
         idx0 = np.where(y_true == 0)[0]
         idx1 = np.where(y_true == 1)[0]
-        n1 = min(len(idx1), max(1000, int(max_n * len(idx1) / len(y_true))))
-        n0 = min(len(idx0), max_n - n1)
+        n1 = int(round(max_n * len(idx1) / len(y_true)))
+        n0 = max_n - n1
+        if n1 == 0 or n0 == 0:
+            return point, np.nan, np.nan
         keep = np.concatenate([rng.choice(idx0, n0, replace=False), rng.choice(idx1, n1, replace=False)])
         y_true, score = y_true[keep], score[keep]
-    point = metric_fn(y_true, score)
     vals = []
     n = len(y_true)
     for _ in range(n_boot):
