@@ -16,7 +16,7 @@ def import_umap():
 
 
 def tube_order(rows):
-    return sorted(rows["_tube_id"].astype(str).unique(), key=lambda x: int(x) if x.isdigit() else x)
+    return sorted(rows["_tube_id"].astype(str).unique(), key=lambda x: (0, int(x), x) if x.isdigit() else (1, x))
 
 
 def pad_width(x: np.ndarray, width: int) -> np.ndarray:

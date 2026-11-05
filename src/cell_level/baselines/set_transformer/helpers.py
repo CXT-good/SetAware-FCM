@@ -18,6 +18,7 @@ from dataio.class_lists import (
 )
 from dataio.flow_dataset import _read_csv_with_fallback
 from dataio.marker_mapping import LABEL_COLUMN, MARKER_LIST, MARKER_TO_INDEX
+from dataio.paths import remap_manifest_path
 from cell_level.baselines.set_transformer.model import StandaloneSetTransformer
 
 
@@ -30,7 +31,7 @@ def read_split_paths(xlsx_path: str, split: str, csv_col: str = "csv_path") -> l
     paths: list[str] = []
     missing = 0
     for raw in df[csv_col].dropna().astype(str):
-        path = os.path.abspath(os.path.expanduser(raw.strip()))
+        path = os.path.abspath(os.path.expanduser(remap_manifest_path(raw.strip())))
         if os.path.isfile(path):
             paths.append(path)
         else:
@@ -87,10 +88,17 @@ def iter_csv_chunks(
         yield x, y
 
 
-def _cache_stem(csv_path: str) -> str:
-    digest = hashlib.sha1(csv_path.encode("utf-8")).hexdigest()[:12]
+def _cache_stem(csv_path: str, configuration: dict) -> str:
+    """Identify the complete source and configuration, including marker order."""
+    digest = hashlib.sha256(
+        json.dumps(configuration, sort_keys=True, ensure_ascii=False).encode("utf-8")
+    )
+    digest.update(b"\0")
+    with open(csv_path, "rb") as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(chunk)
     safe = Path(csv_path).stem.replace(" ", "_")[:80]
-    return f"{safe}_{digest}"
+    return f"{safe}_{digest.hexdigest()}"
 
 
 def build_uniform_tube_cache(
@@ -105,13 +113,36 @@ def build_uniform_tube_cache(
 ) -> tuple[str, str, int]:
     """Create a deterministic uniform reservoir sample without loading a whole tube."""
     os.makedirs(cache_dir, exist_ok=True)
-    stem = _cache_stem(csv_path)
+    stem = _cache_stem(
+        csv_path,
+        {
+            "version": 1,
+            "csv_path": csv_path,
+            "marker_columns": list(marker_columns),
+            "class_to_index": class_to_index,
+            "max_cells": max_cells,
+            "seed": seed,
+            "chunksize": chunksize,
+        },
+    )
     x_path = os.path.join(cache_dir, stem + "_x.npy")
     y_path = os.path.join(cache_dir, stem + "_y.npy")
     if os.path.isfile(x_path) and os.path.isfile(y_path):
-        x_cached = np.load(x_path, mmap_mode="r")
-        if x_cached.ndim == 2 and x_cached.shape[1] == len(marker_columns):
-            return x_path, y_path, int(x_cached.shape[0])
+        try:
+            x_cached = np.load(x_path, mmap_mode="r")
+            y_cached = np.load(y_path, mmap_mode="r")
+            if (
+                x_cached.ndim == 2
+                and x_cached.shape[1] == len(marker_columns)
+                and x_cached.dtype == np.float32
+                and y_cached.shape == (x_cached.shape[0],)
+                and y_cached.dtype == np.int64
+                and x_cached.shape[0] <= max_cells
+            ):
+                return x_path, y_path, int(x_cached.shape[0])
+        except (OSError, ValueError, EOFError):
+            # Interrupted or malformed cache writes can be rebuilt from the CSV.
+            pass
 
     rng_seed = seed ^ int(hashlib.sha1(csv_path.encode("utf-8")).hexdigest()[:8], 16)
     rng = np.random.default_rng(rng_seed)

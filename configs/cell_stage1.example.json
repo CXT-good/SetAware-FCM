@@ -1,0 +1,17 @@
+{
+  "description": "CTransformer example using an explicitly supplied pretrained MAE encoder.",
+  "module": "cell_level.ctransformer.train",
+  "arguments": [
+    "--train_xlsx", "${FCM_DATA_ROOT}/cell_split.xlsx",
+    "--class_mapping_path", "${FCM_DATA_ROOT}/class_mapping.json",
+    "--steps_cache", "${FCM_OUTPUT_ROOT}/cache/train_steps.json",
+    "--output_dir", "${FCM_OUTPUT_ROOT}/cell_stage1",
+    "--init_mode", "from_pretrain",
+    "--pretrained_path", "${FCM_MAE_CHECKPOINT}",
+    "--model_size", "tiny",
+    "--epochs", "60",
+    "--batch_size", "4096",
+    "--patience", "10",
+    "--seed", "42"
+  ]
+}

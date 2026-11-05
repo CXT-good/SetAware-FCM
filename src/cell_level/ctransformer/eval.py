@@ -22,6 +22,7 @@ from tqdm import tqdm
 
 from dataio.class_lists import dataset_key_from_split_xlsx, macro_label_indices
 from dataio.flow_dataset import FlowCytometryDataset, _read_csv_with_fallback
+from dataio.paths import remap_manifest_path
 from dataio.marker_mapping import (
     LABEL_COLUMN,
     MARKER_INDEX_LIST,
@@ -265,7 +266,7 @@ def _collect_test_csv_paths(
     paths: list[str] = []
     missing = 0
     for raw in df[csv_col].astype(str).tolist():
-        p = os.path.abspath(raw.strip())
+        p = os.path.abspath(remap_manifest_path(raw.strip()))
         if not p.lower().endswith(".csv"):
             continue
         if os.path.isfile(p):

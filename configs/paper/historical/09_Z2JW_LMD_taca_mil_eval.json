@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "kind": "historical_recipe",
+  "status": "historical_configuration_recovered",
+  "clinical_reproduction_verified": false,
+  "dataset": "09_Z2JW_LMD",
+  "method": "TACA-MIL",
+  "paper_item": "Table 3 / Patient-classification performance",
+  "evidence": [
+    {
+      "source": "patient_and_gate_level_large_tables.xlsx / Sources",
+      "sha256": "43acd9dc89a7ddcb33faaaa93cd5ee8601fe7452e4c46bfda63e5ee75c89668a",
+      "sheet": "Sources",
+      "row": 7
+    },
+    {
+      "id": "09_Z2JW_LMD_stage2_eval_config",
+      "source": "09_Z2JW_LMD / TACA-MIL / eval_config.json",
+      "sha256": "f2ba698c649bd35a82e9a553852ed81345f43c588406ef627b035de7f8478932"
+    },
+    {
+      "source": "09_Z2JW_LMD / TACA-MIL / summary.json",
+      "sha256": "6d7a3a1aa26625200c602a6a5696cf84bf3bf32c0bac629ff63d1c2776276361"
+    }
+  ],
+  "historical_protocol": {
+    "test_used_for_checkpoint_selection": true,
+    "selection_metric": "macro_f1",
+    "selection_sheet": "test",
+    "checkpoint_role": "checkpoint_best.pt",
+    "checkpoint_epoch": 54,
+    "checkpoint_sha256": null
+  },
+  "unresolved": [
+    "private_split_manifest_and_preprocessing_artifacts",
+    "pretrained_encoder_checkpoint_identity",
+    "training_world_size_and_software_lock",
+    "clinical_metric_reproduction",
+    "selected_checkpoint_file_and_checksum"
+  ],
+  "description": "Recovered effective evaluation controls. Explicit options preserve the recorded cohort/cell cap even where the historical CLI contained null.",
+  "module": "patient_level.taca_mil.eval",
+  "required_environment": [
+    "FCM_DATA_ROOT",
+    "FCM_OUTPUT_ROOT",
+    "FCM_PATIENT_CHECKPOINT"
+  ],
+  "arguments": [
+    "--split_xlsx",
+    "${FCM_DATA_ROOT}/09_Z2JW_LMD_dataset_split.xlsx",
+    "--sheet",
+    "test",
+    "--checkpoint",
+    "${FCM_PATIENT_CHECKPOINT}",
+    "--output_dir",
+    "${FCM_OUTPUT_ROOT}/09_Z2JW_LMD_taca_mil_evaluation",
+    "--filter_mode",
+    "count",
+    "--max_cells_per_tube",
+    "5000",
+    "--seed",
+    "2024"
+  ],
+  "original_nullable_cli": {
+    "sheet": "test",
+    "filter_mode": null,
+    "max_cells_per_tube": null,
+    "seed": null
+  },
+  "effective_evaluation": {
+    "filter_mode": "count",
+    "max_cells_per_tube": 5000,
+    "random_sample": false,
+    "seed": 2024
+  }
+}

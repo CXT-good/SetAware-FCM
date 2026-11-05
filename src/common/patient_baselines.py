@@ -1,5 +1,6 @@
 """Shared, reproducible I/O, features, models, and evaluation for patient tasks."""
 from __future__ import annotations
+import hashlib
 import json, random
 from pathlib import Path
 from typing import Iterable
@@ -24,25 +25,46 @@ def pick_column(columns: Iterable[str], candidates: Iterable[str], required=True
     return None
 
 def read_split_book(split_xlsx: str, split: str) -> pd.DataFrame:
-    sheets = pd.ExcelFile(split_xlsx).sheet_names
-    wanted = next((s for s in sheets if s.lower() == split.lower()), None)
-    if wanted is None:
-        # Some workbooks hold all rows in one sheet and store a split column.
-        wanted = sheets[0]
-    df = pd.read_excel(split_xlsx, sheet_name=wanted)
-    split_col = pick_column(df.columns, ('split', 'set', 'fold'), required=False)
-    if split_col is not None and wanted == sheets[0]:
-        df = df[df[split_col].astype(str).str.lower() == split.lower()].copy()
+    requested = split.strip().casefold()
+    with pd.ExcelFile(split_xlsx) as workbook:
+        sheets = workbook.sheet_names
+        wanted = next((s for s in sheets if s.strip().casefold() == requested), None)
+        if wanted is None and len(sheets) != 1:
+            raise ValueError(f'Split {split!r} is missing from workbook sheets {sheets}')
+        sheet = wanted if wanted is not None else sheets[0]
+        columns = pd.read_excel(workbook, sheet_name=sheet, nrows=0).columns
+        # Preserve Excel string identities such as "01" alongside numeric tube IDs.
+        tube_dtypes = {c: object for c in columns if str(c).strip().casefold() == 'tube_type'}
+        df = pd.read_excel(workbook, sheet_name=sheet, dtype=tube_dtypes)
+    split_col = None
+    if len(sheets) == 1:
+        normalized_columns = {str(c).strip().casefold(): c for c in df.columns}
+        split_col = next((normalized_columns[name] for name in ('split', 'set', 'fold') if name in normalized_columns), None)
+    partitioned = split_col is not None
+    if wanted is None and not partitioned:
+        raise ValueError(f'Split {split!r} is missing and the single sheet has no split column')
+    if partitioned:
+        # A single sheet's explicit partitions take precedence over its sheet name.
+        df = df[df[split_col].astype(str).str.strip().str.casefold() == requested].copy()
+        if df.empty:
+            raise ValueError(f'Split {split!r} has no rows in the single-sheet partition')
     path_col = pick_column(df.columns, PATH_COLS)
     label_col = pick_column(df.columns, LABEL_COLS)
     patient_col = pick_column(df.columns, PATIENT_COLS, required=False)
     df = df.dropna(subset=[path_col, label_col]).copy()
+    if partitioned and df.empty:
+        raise ValueError(f'Split {split!r} has no rows with a CSV path and label')
     df['_csv_path'] = df[path_col].astype(str).map(remap_manifest_path)
     df['_label'] = df[label_col].astype(str)
     df['_patient_id'] = (df[patient_col].astype(str) if patient_col else df['_csv_path'].map(lambda x: Path(x).stem.split('_')[0]))
     missing = [p for p in df['_csv_path'] if not Path(p).is_file()]
     if missing: raise FileNotFoundError(f'{len(missing)} CSV paths do not exist; first: {missing[0]}')
     return df
+
+def stable_seed(seed: int, *identities: str) -> int:
+    """Derive a reproducible RNG seed from logical identities, never file paths."""
+    payload = json.dumps([int(seed), *map(str, identities)], ensure_ascii=False, separators=(',', ':'))
+    return int.from_bytes(hashlib.sha256(payload.encode('utf-8')).digest()[:8], 'little')
 
 def choose_split(split_xlsx: str, preferred: str, fallback: str = 'test') -> str:
     sheets = pd.ExcelFile(split_xlsx).sheet_names

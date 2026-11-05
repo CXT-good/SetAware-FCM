@@ -1,0 +1,18 @@
+{
+  "description": "Zhongnan-style PACTransformer architecture; dataset-specific settings and class count must be checked.",
+  "module": "cell_level.pactransformer.train",
+  "arguments": [
+    "--embeddings_dir", "${FCM_DATA_ROOT}/train_payload/embeddings",
+    "--labels_dir", "${FCM_DATA_ROOT}/train_payload/labels",
+    "--xuhao_dir", "${FCM_DATA_ROOT}/train_payload/xuhao",
+    "--output_dir", "${FCM_OUTPUT_ROOT}/cell_stage2",
+    "--num_classes", "${FCM_NUM_CLASSES}",
+    "--dim_input", "128",
+    "--dim_hidden", "512",
+    "--num_heads", "8",
+    "--num_inds", "16",
+    "--num_layers", "6",
+    "--epochs", "100",
+    "--seed", "42"
+  ]
+}

@@ -1,0 +1,5 @@
+dataset,task,method,split_definition,recipe,seed,checkpoint_role,checkpoint_path,selection_policy,evaluation_command,paper_item,status
+DATASET,cell,CTransformer,SPLIT_ID,configs/cell_stage1.example.json,42,TO_VERIFY,TO_SUPPLY,TO_VERIFY,TO_SUPPLY,Table2,template_not_verified
+DATASET,cell,PACTransformer,SPLIT_ID,configs/cell_stage2.example.json,42,TO_VERIFY,TO_SUPPLY,TO_VERIFY,TO_SUPPLY,Table2,template_not_verified
+DATASET,patient,CA-MIL,SPLIT_ID,configs/patient_ca_mil.example.json,42,TO_VERIFY,TO_SUPPLY,TO_VERIFY,TO_SUPPLY,Table3,template_not_verified
+DATASET,patient,TACA-MIL,SPLIT_ID,configs/patient_taca_mil.example.json,42,TO_VERIFY,TO_SUPPLY,TO_VERIFY,TO_SUPPLY,Table3,template_not_verified

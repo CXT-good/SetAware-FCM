@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools==80.9.0", "wheel==0.45.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fcm-ml"
+version = "1.0.0"
+description = "Marker-aware and population-context models for flow cytometry"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+requires-python = ">=3.9,<3.13"
+dependencies = [
+  "torch==2.8.0",
+  "numpy==2.0.2",
+  "pandas==2.3.1",
+  "scikit-learn==1.6.1",
+  "scipy==1.13.1",
+  "matplotlib==3.9.4",
+  "openpyxl==3.1.5",
+  "tqdm==4.67.2",
+  "joblib==1.5.1",
+]
+
+[project.optional-dependencies]
+baselines = ["xgboost==2.1.4", "umap-learn==0.5.12"]
+dev = ["pytest==8.4.2", "PyYAML==6.0.2", "build==1.2.2.post1", "tomli==2.2.1; python_version < '3.11'"]
+
+[project.urls]
+Repository = "https://github.com/Intelligent-Medical-Research-Group/SetAware-FCM"
+Documentation = "https://github.com/Intelligent-Medical-Research-Group/SetAware-FCM/tree/main/docs"
+Issues = "https://github.com/Intelligent-Medical-Research-Group/SetAware-FCM/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["dataio*", "common*", "mae*", "cell_level*", "patient_level*"]
+
+[tool.setuptools.package-data]
+"dataio" = ["class_mappings/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra"

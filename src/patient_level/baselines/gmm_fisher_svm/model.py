@@ -21,6 +21,7 @@ from sklearn.metrics import (
 )
 
 from common.patient_paper import patient_table, patient_labels, write_json
+from common.patient_baselines import stable_seed
 
 EXCLUDE_COLS = {
     "label", "labels", "target", "class", "diagnosis", "y", "disease",
@@ -85,7 +86,7 @@ def load_cells_for_patient(rows: pd.DataFrame, patient_id: str, markers: list[st
         raise ValueError(f"no cells loaded for patient {patient_id}")
     x = np.vstack(chunks).astype(np.float32, copy=False)
     if max_cells_per_patient > 0 and len(x) > max_cells_per_patient:
-        rng = np.random.default_rng(seed + (abs(hash(str(patient_id))) % (2**31)))
+        rng = np.random.default_rng(stable_seed(seed, "gmm_patient", patient_id))
         x = x[rng.choice(len(x), max_cells_per_patient, replace=False)]
     return x
 
