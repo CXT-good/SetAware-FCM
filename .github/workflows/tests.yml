@@ -18,12 +18,15 @@ jobs:
       OPENBLAS_NUM_THREADS: '1'
       PYTHONDONTWRITEBYTECODE: '1'
       PYTHONHASHSEED: '42'
-      NUMBA_CACHE_DIR: ${{ runner.temp }}/numba-cache
-      MPLCONFIGDIR: ${{ runner.temp }}/matplotlib-cache
     steps:
       - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
+      - name: Configure cache directories
+        run: |
+          mkdir -p "$RUNNER_TEMP/numba-cache" "$RUNNER_TEMP/matplotlib-cache"
+          echo "NUMBA_CACHE_DIR=$RUNNER_TEMP/numba-cache" >> "$GITHUB_ENV"
+          echo "MPLCONFIGDIR=$RUNNER_TEMP/matplotlib-cache" >> "$GITHUB_ENV"
       - uses: actions/setup-python@v7.1.0
         with:
           python-version: '3.9.25'
