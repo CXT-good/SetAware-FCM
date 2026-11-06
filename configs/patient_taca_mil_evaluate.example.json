@@ -1,0 +1,20 @@
+{
+  "description": "Portable TACA-MIL evaluation with explicit matched cohort/cell-cap options. Matches the separate-validation examples, not an assertion about paper test selection.",
+  "module": "patient_level.taca_mil.eval",
+  "arguments": [
+    "--split_xlsx",
+    "${FCM_DATA_ROOT}/patient_split.xlsx",
+    "--sheet",
+    "test",
+    "--checkpoint",
+    "${FCM_PATIENT_CHECKPOINT}",
+    "--output_dir",
+    "${FCM_OUTPUT_ROOT}/taca_mil_evaluation",
+    "--filter_mode",
+    "none",
+    "--max_cells_per_tube",
+    "5000",
+    "--seed",
+    "42"
+  ]
+}

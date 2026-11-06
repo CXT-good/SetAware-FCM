@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "description": "Methods 2.3 Zhongnan PACTransformer variant, not a universal configuration for every dataset.",
+  "kind": "manuscript_recipe",
+  "status": "manuscript_derived",
+  "clinical_reproduction_verified": false,
+  "historical_run_id": null,
+  "paper_item": "Methods 2.3 / Zhongnan cell-level training; Table 2 (configuration only)",
+  "evidence": [
+    {
+      "source": "main.tex / Methods 2.3 and 2.4 (2026-11-05)",
+      "sha256": "f55bac01be8050bb2e3742d5a09ae37703a010af0371205de24d1c695633e6d6"
+    }
+  ],
+  "unresolved": [
+    "historical_final_run_identity",
+    "original_data_partitions_and_preprocessing",
+    "checkpoint_identity_and_selection",
+    "clinical_metric_reproduction"
+  ],
+  "module": "cell_level.pactransformer.train",
+  "required_environment": [
+    "FCM_DATA_ROOT",
+    "FCM_NUM_CLASSES",
+    "FCM_OUTPUT_ROOT",
+    "FCM_TRAIN_SEED"
+  ],
+  "arguments": [
+    "--embeddings_dir",
+    "${FCM_DATA_ROOT}/train_payload/embeddings",
+    "--labels_dir",
+    "${FCM_DATA_ROOT}/train_payload/labels",
+    "--xuhao_dir",
+    "${FCM_DATA_ROOT}/train_payload/xuhao",
+    "--output_dir",
+    "${FCM_OUTPUT_ROOT}/pactransformer",
+    "--num_classes",
+    "${FCM_NUM_CLASSES}",
+    "--dim_input",
+    "128",
+    "--dim_hidden",
+    "512",
+    "--num_heads",
+    "8",
+    "--num_inds",
+    "16",
+    "--num_layers",
+    "6",
+    "--dropout",
+    "0.1",
+    "--epochs",
+    "100",
+    "--batch_size",
+    "1",
+    "--lr",
+    "1e-4",
+    "--weight_decay",
+    "1e-5",
+    "--seed",
+    "${FCM_TRAIN_SEED}"
+  ]
+}

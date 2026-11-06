@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "description": "Methods 2.3 CA-MIL schedule with a separate validation sheet. This prospective protocol is NOT the historical checkpoint-selection protocol.",
+  "kind": "manuscript_recipe",
+  "status": "manuscript_derived",
+  "clinical_reproduction_verified": false,
+  "historical_run_id": null,
+  "paper_item": "Methods 2.3 / Patient-level training; Table 3 (configuration only)",
+  "evidence": [
+    {
+      "source": "main.tex / Methods 2.3 and 2.4 (2026-11-05)",
+      "sha256": "f55bac01be8050bb2e3742d5a09ae37703a010af0371205de24d1c695633e6d6"
+    }
+  ],
+  "unresolved": [
+    "historical_final_run_identity",
+    "original_data_partitions_and_preprocessing",
+    "checkpoint_identity_and_selection",
+    "clinical_metric_reproduction"
+  ],
+  "module": "patient_level.ca_mil.train",
+  "required_environment": [
+    "FCM_DATA_ROOT",
+    "FCM_MAE_CHECKPOINT",
+    "FCM_OUTPUT_ROOT",
+    "FCM_TRAIN_SEED"
+  ],
+  "arguments": [
+    "--split_xlsx",
+    "${FCM_DATA_ROOT}/patient_split.xlsx",
+    "--train_sheet",
+    "train",
+    "--val_sheet",
+    "validation",
+    "--pretrained_encoder",
+    "${FCM_MAE_CHECKPOINT}",
+    "--output_dir",
+    "${FCM_OUTPUT_ROOT}/ca_mil",
+    "--model_size",
+    "tiny",
+    "--d_model",
+    "128",
+    "--encoder_layers",
+    "6",
+    "--decoder_layers",
+    "2",
+    "--n_heads",
+    "8",
+    "--d_ff",
+    "512",
+    "--dropout",
+    "0.1",
+    "--attention_hidden_dim",
+    "128",
+    "--classifier_hidden_dim",
+    "128",
+    "--filter_mode",
+    "count",
+    "--max_cells_per_tube",
+    "5000",
+    "--epochs",
+    "160",
+    "--lr",
+    "1e-4",
+    "--weight_decay",
+    "1e-4",
+    "--grad_clip",
+    "1.0",
+    "--seed",
+    "${FCM_TRAIN_SEED}",
+    "--batch_size",
+    "1"
+  ],
+  "operational_choices": {
+    "validation": "New patient-disjoint validation split required; do not relabel historical test selection as validation.",
+    "filter_mode": "count matches recovered patient records, but can exclude nonmodal tube counts.",
+    "seed": "Operator supplied.",
+    "grad_clip": 1,
+    "set_num_layers": null
+  }
+}

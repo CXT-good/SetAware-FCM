@@ -1,0 +1,13 @@
+{
+  "description": "Evaluate one explicitly selected PACTransformer checkpoint on a held-out payload.",
+  "module": "cell_level.pactransformer.eval",
+  "arguments": [
+    "--model_path", "${FCM_CELL_CHECKPOINT}",
+    "--embeddings_dir", "${FCM_DATA_ROOT}/test_payload/embeddings",
+    "--labels_dir", "${FCM_DATA_ROOT}/test_payload/labels",
+    "--xuhao_dir", "${FCM_DATA_ROOT}/test_payload/xuhao",
+    "--output_dir", "${FCM_OUTPUT_ROOT}/cell_evaluation",
+    "--seed", "2024",
+    "--bootstrap", "1000"
+  ]
+}
